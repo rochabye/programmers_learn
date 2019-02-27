@@ -1,45 +1,27 @@
 #include <string>
 #include <queue>
-#include <map>
+#include <algorithm>
 using namespace std;
-
-template<typename T>
-void pop_front(std::vector<T>& vec, std::vector<T>&vec_index)
-{
-    if ( !vec.empty() && !vec_index.empty() ) {
-        vec.erase( vec.begin() );
-        vec_index.erase( vec_index.begin() );
-    }
-}
 int solution(vector<int> priorities, int location) {
-    int answer = 0;
-    int count = 0;
-    std::vector< int > prior_q;
-    prior_q = priorities;
-    std::vector< int > index_q;
-    for( int i = 0; i < prior_q.size(); ++i ) {
-        index_q.push_back( i );
+
+    queue< int > printer;
+    std::vector< int > sorted;
+    for( int i = 0; i < priorities.size(); ++i ) {
+        printer.push( i );
     }
-    
-    while( !prior_q.empty() ) {
-        bool is_max = true;
-        int prior = prior_q[0];
-        int index = index_q[0];
-        pop_front( prior_q, index_q );
+    while( !printer.empty() ) {
+        int now_index = printer.front();
+        printer.pop();
         
-        for( int i = 0; i < prior_q.size(); ++i ) {
-            if ( prior < prior_q[i] ) {
-                prior_q.push_back( prior );
-                index_q.push_back( index );
-                is_max = false;
-            }
+        if ( priorities[now_index] != *max_element( priorities.begin(), priorities.end() ) ) {
+            printer.push( now_index );
+        } else {
+            sorted.push_back( now_index );
+            priorities[ now_index ] = 0;
         }
-        count++;
-        if ( is_max && index == location ) { 
-            answer = count; 
-            break;
+        for( int i = 0; i < sorted.size(); ++i ) {
+            if ( sorted[i] == location ) return i + 1;
         }
     }
-    
-    return answer;
+    return -1;
 }
