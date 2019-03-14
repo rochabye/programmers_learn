@@ -2,13 +2,6 @@
 #include <queue>
 using namespace std;
 
-
-class Truck
-{
-public:
-	int weight;
-};
-
 int solution(int bridge_length, int weight, vector<int> truck_weights) {
 	int answer = 0;
 	queue<int> bridge;
