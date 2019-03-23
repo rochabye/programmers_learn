@@ -30,6 +30,16 @@ void PopHeap(vector< int >& heap) {
 		here = next;
 	}
 }
+int MakeScoville(int a, int b) {
+	int result = 0;
+	if (a < b) {
+		result = a + (b * 2);
+	}
+	else {
+		result = b + (a * 2);
+	}
+	return result;
+}
 
 int solution(vector<int> scoville, int K) {
     int answer = 0;
