@@ -5,7 +5,7 @@ using namespace std;
 
 void PushHeap(vector< int >& heap, int new_value) {
 	heap.push_back(new_value);
-	int index = heap.size() - 1;
+	int index = heap.size() - 1; 
 
 	while (index > 0 && heap[(index - 1) / 2] > heap[index]) {
 		swap(heap[index], heap[(index - 1) / 2]);
@@ -42,6 +42,13 @@ int MakeScoville(int a, int b) {
 }
 
 int solution(vector<int> scoville, int K) {
+	if ( scoville.size() < 1 ) {
+		return -1;
+	}
+	std::vector< int > heap;
+	for( int i = 0; i < scoville.size(); ++i ) {
+		PushHeap( heap, scoville[ i ] );
+	}
     int answer = 0;
     return answer;
 }
