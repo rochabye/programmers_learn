@@ -1,11 +1,12 @@
 #include <string>
 #include <vector>
+#include <algorithm>
 
 using namespace std;
 
 void PushHeap(vector< int >& heap, int new_value) {
 	heap.push_back(new_value);
-	int index = heap.size() - 1; 
+	int index = heap.size() - 1;
 
 	while (index > 0 && heap[(index - 1) / 2] > heap[index]) {
 		swap(heap[index], heap[(index - 1) / 2]);
@@ -13,14 +14,16 @@ void PushHeap(vector< int >& heap, int new_value) {
 	}
 }
 
-void PopHeap(vector< int >& heap) {
+int PopHeap(vector< int >& heap) {
+	int pop_result = heap[0];
 	heap[0] = heap.back();
 	heap.pop_back();
 	int here = 0;
 
 	while (true) {
 		int left = here * 2 + 1, right = here * 2 + 2;
-		if (left >= heap.size()) break;
+		if (left >= heap.size())
+			break;
 		int next = here;
 		if ( heap[ left ] < heap[next] ) next = left;
 		if ( right < heap.size() && heap[right] < heap[next]) next = right;
@@ -28,6 +31,7 @@ void PopHeap(vector< int >& heap) {
 		swap(heap[here], heap[next]);
 		here = next;
 	}
+	return pop_result;
 }
 
 int MakeScoville(int a, int b) {
@@ -42,13 +46,28 @@ int MakeScoville(int a, int b) {
 }
 
 int solution(vector<int> scoville, int K) {
-	if ( scoville.size() < 1 ) {
+	if (scoville.size() < 1) {
 		return -1;
 	}
+	int answer = 0;
 	std::vector< int > heap;
-	for( int i = 0; i < scoville.size(); ++i ) {
-		PushHeap( heap, scoville[ i ] );
+	for (int i = 0; i < scoville.size(); ++i) {
+		PushHeap(heap, scoville[i]);
 	}
-    int answer = 0;
-    return answer;
+	
+	while (true) {
+		if (heap.size() < 2) {
+			if (PopHeap(heap) < K) {
+				return -1;
+			}
+		}
+		int pop_1 = PopHeap(heap);
+		int pop_2 = PopHeap(heap);
+		if (pop_1 > K) {
+			break;
+		}
+		PushHeap(heap, MakeScoville(pop_1, pop_2));
+		++answer;
+	}
+	return answer;
 }
