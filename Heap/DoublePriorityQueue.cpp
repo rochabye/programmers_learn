@@ -1,8 +1,7 @@
-#include <iostream>
 #include <string>
 #include <vector>
-#include <algorithm>
 
+#include <algorithm>
 using namespace std;
 
 void PushMinHeap(vector< int >& heap, int new_value) {
@@ -76,35 +75,39 @@ vector< int > solution(vector<string> operations) {
 			PushMinHeap(min_heap, value);
 		}
 		else if (operation.compare(0, 1, "D") == 0) {
+			if (max_heap.empty()) {
+				break;
+			}
 			int value = atoi(operation.assign(operation.begin() + 2, operation.end()).c_str());
 			if (value == 1) {
-				PopMaxHeap(max_heap);
+				int val = PopMaxHeap(max_heap);
+				vector<int>::iterator it;
+				it = find(min_heap.begin(), min_heap.end(), val );
+				if (!min_heap.empty() && it != min_heap.end()) {
+					min_heap.erase(it);
+				}
 			}
 			else if (value == -1) {
-				PopMinHeap(min_heap);
+				int val = PopMinHeap(min_heap);
+				vector<int>::iterator it;
+				it = find(max_heap.begin(), max_heap.end(), val);
+				if ( !max_heap.empty() && it != max_heap.end() ) {
+					max_heap.erase(it);
+				}
 			}
 		}
 	}
-	vector< int > tmp;
-	for (int i = 0; i < max_heap.size(); ++i) {
-		for (int j = 0; j < min_heap.size(); ++j) {
-			if (max_heap[i] == min_heap[j]) {
-				tmp.push_back(max_heap[i]);
-			}
-		}
-	}
-	if (tmp.empty()) {
+	if (max_heap.empty()) {
 		result.push_back(0);
-		result.push_back(0);
-	}
-	else if (tmp.size() == 1) {
-		result.push_back(tmp[0]);
-		result.push_back(tmp[0]);
 	}
 	else {
-		sort(tmp.begin(), tmp.end());
-		result.push_back( tmp[tmp.size() - 1]);
-		result.push_back(tmp[0]);
+		result.push_back(PopMaxHeap(max_heap));
+	}
+	if (min_heap.empty()) {
+		result.push_back(0);
+	}
+	else {
+		result.push_back(PopMinHeap(min_heap));
 	}
 	return result;
 }
