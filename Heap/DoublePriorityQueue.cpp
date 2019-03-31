@@ -75,8 +75,8 @@ vector< int > solution(vector<string> operations) {
 			PushMinHeap(min_heap, value);
 		}
 		else if (operation.compare(0, 1, "D") == 0) {
-			if (max_heap.empty()) {
-				break;
+			if (max_heap.empty() ) {
+				continue;
 			}
 			int value = atoi(operation.assign(operation.begin() + 2, operation.end()).c_str());
 			if (value == 1) {
